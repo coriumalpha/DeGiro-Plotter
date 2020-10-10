@@ -9,9 +9,12 @@ namespace SJew.Business
 {
     public class LoaderService
     {
+        private string _filePath = @"C:\Users\Corium\Desktop\Transactions.csv";
         public List<Transaction> ReadTransactions()
         {
-            using (var reader = new StreamReader(@"C:\Users\Corium\Desktop\Transactions.csv"))
+            FileStream fileStream = new FileStream(_filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+
+            using (var reader = new StreamReader(fileStream))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
                 csv.Configuration.HasHeaderRecord = true;

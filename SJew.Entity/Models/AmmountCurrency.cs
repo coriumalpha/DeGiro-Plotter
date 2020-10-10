@@ -7,6 +7,10 @@ namespace SJew.Entities.Models
 {
     public class AmmountCurrency : Entity
     {
+        public AmmountCurrency()
+        {
+
+        }
         public AmmountCurrency(double? ammount, string currency)
         {
             Ammount = ammount;

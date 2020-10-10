@@ -14,21 +14,19 @@ namespace Sjew.Operator
 
             LoaderService loaderService = new LoaderService();
             List<Transaction> transactions = loaderService.ReadTransactions();
+            
+            AnalyticsService analyticsService = new AnalyticsService(transactions);
 
-            IEnumerable<IGrouping<string, Transaction>> groups = transactions.GroupBy(x => x.ISIN).OrderBy(x => x.Sum(x => x.Charge.Ammount)).ToList();
-            foreach (IGrouping<string, Transaction> group in groups)
+            IEnumerable<IGrouping<string, Transaction>> openPositions = analyticsService.GetOpenPositions();
+
+            foreach (IGrouping<string, Transaction> position in openPositions)
             {
-                Console.WriteLine(String.Format("{0} [{1}] ({2})", group.FirstOrDefault().Product, group.FirstOrDefault().Price.Currency, group.FirstOrDefault().ISIN));
-                Console.WriteLine(String.Format("    Charge: {0} {1}", group.Sum(x => x.Charge.Ammount), group.FirstOrDefault().Charge.Currency));
-                Console.WriteLine(String.Format("    Value: {0} {1}", group.Sum(x => x.Value.Ammount), group.FirstOrDefault().Value.Currency));
-                Console.WriteLine();
+                Console.WriteLine(position.First().Product);
+                Console.WriteLine(position.Sum(x => x.Quantity));
             }
 
-            Console.WriteLine(String.Format("Total charge: {0} EUR", transactions.Sum(x => x.Charge.Ammount)));
-            Console.WriteLine(String.Format("Total value: {0} EUR", transactions.Sum(x => x.Value.Ammount)));
-            Console.WriteLine(String.Format("Absolute value: {0} EUR", transactions.Sum(x => Math.Abs(x.Value.Ammount.Value))));
 
-            Console.WriteLine("Prog_End");
+            Console.WriteLine("Programm_End");
             Console.ReadKey();
         }
     }
