@@ -11,9 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SJew.Service", "SJew.Servic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SJew.Api", "SJew.Api\SJew.Api.csproj", "{382570F5-3D1B-4EA5-A94D-E0612BC73DE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SJew.Business", "SJew.Business\SJew.Business.csproj", "{7A3E76FD-261B-4CFC-A252-466722A2560B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SJew.Business", "SJew.Business\SJew.Business.csproj", "{7A3E76FD-261B-4CFC-A252-466722A2560B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sjew.Operator", "Sjew.Operator\Sjew.Operator.csproj", "{74ABC076-E0E2-4DE2-9400-3162206D117D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sjew.Operator", "Sjew.Operator\Sjew.Operator.csproj", "{74ABC076-E0E2-4DE2-9400-3162206D117D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SJew.AlphaVantage", "SJew.AlphaVantage\SJew.AlphaVantage.csproj", "{F1939E6E-46BC-450E-A5D8-8AE5EBF499A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SJew.YahooFinance", "SJew.YahooFinance\SJew.YahooFinance.csproj", "{61600A42-3B25-4D96-9233-811A0BAE9BF9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,14 @@ Global
 		{74ABC076-E0E2-4DE2-9400-3162206D117D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74ABC076-E0E2-4DE2-9400-3162206D117D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74ABC076-E0E2-4DE2-9400-3162206D117D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1939E6E-46BC-450E-A5D8-8AE5EBF499A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1939E6E-46BC-450E-A5D8-8AE5EBF499A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1939E6E-46BC-450E-A5D8-8AE5EBF499A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1939E6E-46BC-450E-A5D8-8AE5EBF499A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61600A42-3B25-4D96-9233-811A0BAE9BF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61600A42-3B25-4D96-9233-811A0BAE9BF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61600A42-3B25-4D96-9233-811A0BAE9BF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61600A42-3B25-4D96-9233-811A0BAE9BF9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

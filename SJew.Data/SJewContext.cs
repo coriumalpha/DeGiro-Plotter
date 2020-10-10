@@ -1,8 +1,7 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
+using SJew.Entities.Models;
 
-namespace SJew.Data.Models
+namespace SJew.Data
 {
     public partial class SJewContext : DbContext
     {

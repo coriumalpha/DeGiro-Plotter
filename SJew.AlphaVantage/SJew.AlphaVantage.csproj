@@ -1,14 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SJew.Business\SJew.Business.csproj" />
+    <PackageReference Include="AlphaVantage.Net.Stocks" Version="2.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SJew.Entity\SJew.Entities.csproj" />
-    <ProjectReference Include="..\SJew.YahooFinance\SJew.YahooFinance.csproj" />
   </ItemGroup>
 
 </Project>
