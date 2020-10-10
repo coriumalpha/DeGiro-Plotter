@@ -1,6 +1,6 @@
 ﻿using URF.Core.EF.Trackable;
 
-namespace SJew.Data.Models
+namespace SJew.Entities.Models
 {
     public partial class User : Entity
     {

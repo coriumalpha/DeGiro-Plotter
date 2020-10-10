@@ -1,4 +1,4 @@
-﻿using SJew.Data.Models;
+﻿using SJew.Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
