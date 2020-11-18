@@ -7,7 +7,7 @@ namespace SJew.YahooFinance
     {
         public async void GetSymbols()
         {
-            await Yahoo.
+            //await Yahoo.
             // You could query multiple symbols with multiple fields through the following steps:
             var securities = await Yahoo.Symbols("US02079K3059").Fields(Field.Symbol, Field.RegularMarketPrice, Field.FiftyTwoWeekHigh).QueryAsync();
 

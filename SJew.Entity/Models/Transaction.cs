@@ -3,6 +3,9 @@ using URF.Core.EF.Trackable;
 
 namespace SJew.Entities.Models
 {
+    /// <summary>
+    /// Transacción proviniente del histórico
+    /// </summary>
     public partial class Transaction : Entity
     {
         public Guid Id { get; set; }
