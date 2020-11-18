@@ -12,26 +12,14 @@ namespace Sjew.Operator
             Console.WriteLine("Degiro Plotter");
             Console.WriteLine();
 
-            ShowWalletTest();
-            //TestYahoo();
+            Controller controller = new Controller();
+            
+            controller.ShowTotalRevenue();
+            controller.ShowTotalRevenue(false);
 
-            Console.WriteLine("Programm_End");
+            Console.WriteLine();
+            Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
-        }
-
-        static async void ShowWalletTest()
-        {
-            LoaderService loaderService = new LoaderService();
-            List<Transaction> transactions = loaderService.ReadTransactions();
-            List<Asset> portfolio = loaderService.ReadPortfolio();
-
-            AnalyticsService analyticsService = new AnalyticsService(transactions, portfolio);
-
-            AmmountCurrency portfolioValue = analyticsService.GetPortfolioTotalValue();
-            AmmountCurrency totalValue = analyticsService.GetTotalValue();
-            AmmountCurrency totalCharges = analyticsService.GetTotalCharges();
-
-            Console.WriteLine("Total: ", portfolioValue.Ammount + totalValue.Ammount + totalCharges.Ammount);
         }
     }
 }
