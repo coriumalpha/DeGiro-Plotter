@@ -13,5 +13,5 @@ The application is aimed at the validation and verification of the data provided
   - [ ] Get invested volume
   - [ ] Get retrieved volume
   - [ ] Calculate P/L %
-  - [ ] Add GUI
+  - [x] Add GUI (.NET Core WinForms)
   - [ ] Allow CSV loading via GUI
