@@ -11,6 +11,7 @@ The application is aimed at the validation and verification of the data provided
   - [ ] Get retrieved volume
   - [ ] Calculate P/L %
   - [ ] Allow CSV loading via GUI
+  - [ ] Add real time currency exchange support (API)
   
 ### Pre-Alpha 0.0.2  [Released]
   
