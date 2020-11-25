@@ -23,7 +23,7 @@ namespace SJew.Entities.Models
         {
             get
             {
-                return String.Join(" ", Ammount.ToString(), Currency);
+                return String.Join(" ", Ammount?.ToString("n2"), Currency);
             }
         }
     }
