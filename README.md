@@ -1,5 +1,7 @@
 # Degiro Plotter
 
+The application is aimed at the validation and verification of the data provided by DeGiro through the comparison of the CSV files provided by it. In the future, graphing and projection capabilities will be added.
+
 ## Milestones
 
   - [x] Parse Transactions CSV
