@@ -1,4 +1,4 @@
-# Degiro Plotter
+# DeGiro Plotter [Pre-Alpha 0.0.2]
 
 The application is aimed at the validation and verification of the data provided by DeGiro through the comparison of the CSV files provided by it. In the future, graphing and projection capabilities will be added.
 
