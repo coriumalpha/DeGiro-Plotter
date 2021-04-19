@@ -2,6 +2,7 @@
 using SJew.Entities.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace GraphicalOperator
@@ -47,7 +48,7 @@ namespace GraphicalOperator
 
             boxTotalCharges.Text = GetCharges();
 
-            GetTransactionsPerDay();
+            DisplayTransactionsPerDay();
         }
 
         public string GetCharges()
@@ -68,9 +69,24 @@ namespace GraphicalOperator
             return totalRevenue;
         }
 
-        public void GetTransactionsPerDay()
+        public void DisplayTransactionsPerDay()
         {
-            _reportService.TransactionsPerDay();
+            List<DayTransactions> dayTransactions = _reportService.TransactionsPerDay();
+
+            gridTransactionsByDay.DataSource = dayTransactions.Select(x => new { 
+                Date = x.Date,
+                Total = x.Total.Ammount,
+                Value = x.Value.Ammount,
+                Charge = x.Value.Ammount,
+                TotalCurrency = x.Total.Currency,
+                ValueCurrency = x.Value.Currency,
+                ChargeCurrency = x.Charge.Currency
+            }).ToList();
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }
