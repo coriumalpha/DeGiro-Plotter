@@ -9,14 +9,15 @@ namespace GraphicalOperator
     public partial class Plotter : Form
     {
         private AnalyticsService _analyticsService;
+        private ReportService _reportService;
 
         public Plotter()
         {
             InitializeComponent();
-            _analyticsService = GetAnalyticsService();
+            InitServices();
         }
 
-        private AnalyticsService GetAnalyticsService()
+        private void InitServices()
         {
             LoaderService loaderService = new LoaderService();
             try
@@ -24,7 +25,8 @@ namespace GraphicalOperator
                 List<Transaction> transactions = loaderService.ReadTransactions();
                 List<Asset> portfolio = loaderService.ReadPortfolio();
 
-                return new AnalyticsService(transactions, portfolio);
+                _analyticsService = new AnalyticsService(transactions, portfolio);
+                _reportService = new ReportService(transactions, portfolio);
             }
             catch (Exception ex)
             {
@@ -44,6 +46,8 @@ namespace GraphicalOperator
             boxTotalRevenueLocal.Text = totalRevenueText;
 
             boxTotalCharges.Text = GetCharges();
+
+            GetTransactionsPerDay();
         }
 
         public string GetCharges()
@@ -62,6 +66,11 @@ namespace GraphicalOperator
             double totalRevenue = (portfolioValue.Ammount + totalValue.Ammount + totalCharges.Ammount) ?? 0;
 
             return totalRevenue;
+        }
+
+        public void GetTransactionsPerDay()
+        {
+            _reportService.TransactionsPerDay();
         }
     }
 }
