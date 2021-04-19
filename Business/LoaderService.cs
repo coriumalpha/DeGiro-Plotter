@@ -9,8 +9,8 @@ namespace SJew.Business
 {
     public class LoaderService
     {
-        private string _transactionsFilePath = @"C:\Users\Corium\Desktop\Transactions.csv";
-        private string _portfolioFilePath = @"C:\Users\Corium\Desktop\Portfolio.csv";
+        private string _transactionsFilePath = @"C:\Users\Corium\Desktop\DegiroPlotterData\Transactions.csv";
+        private string _portfolioFilePath = @"C:\Users\Corium\Desktop\DegiroPlotterData\Portfolio.csv";
         public List<Transaction> ReadTransactions()
         {
             FileStream fileStream = new FileStream(_transactionsFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);

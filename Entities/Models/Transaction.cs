@@ -13,6 +13,7 @@ namespace SJew.Entities.Models
         public string Product { get; set; }
         public string ISIN { get; set; }
         public string ExchangeMarket { get; set; }
+        public string ExecutionCenter { get; set; }
         public int Quantity { get; set; }
         public AmmountCurrency Price { get; set; }
         public AmmountCurrency LocalValue { get; set; }
