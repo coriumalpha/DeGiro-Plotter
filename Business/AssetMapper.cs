@@ -1,5 +1,5 @@
 ﻿using CsvHelper.Configuration;
-using SJew.Entities.Models;
+using SJew.Entities.Models.Base;
 using System;
 
 namespace SJew.Business

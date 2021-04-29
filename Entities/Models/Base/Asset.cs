@@ -1,7 +1,7 @@
 ﻿using System;
 using URF.Core.EF.Trackable;
 
-namespace SJew.Entities.Models
+namespace SJew.Entities.Models.Base
 {
     /// <summary>
     /// Activo presente en el portfolio actual

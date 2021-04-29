@@ -1,4 +1,4 @@
-﻿using SJew.Entities.Models;
+﻿using SJew.Entities.Models.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;

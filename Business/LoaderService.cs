@@ -1,5 +1,5 @@
 ﻿using CsvHelper;
-using SJew.Entities.Models;
+using SJew.Entities.Models.Base;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;

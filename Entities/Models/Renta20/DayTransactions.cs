@@ -1,7 +1,8 @@
-﻿using System;
+﻿using SJew.Entities.Models.Base;
+using System;
 using URF.Core.EF.Trackable;
 
-namespace SJew.Entities.Models
+namespace SJew.Entities.Models.Renta20
 {
     public partial class DayTransactions : Entity
     {

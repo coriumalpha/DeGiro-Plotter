@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using URF.Core.EF.Trackable;
 
-namespace SJew.Entities.Models
+namespace SJew.Entities.Models.Base
 {
     public class AmmountCurrency : Entity
     {
