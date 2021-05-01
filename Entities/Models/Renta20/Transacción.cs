@@ -19,20 +19,22 @@ namespace Entities.Models.Renta20
         }
         public List<Transacción> Aperturas { get; set; }
         public List<Transacción> Cierres { get; set; }
-        public TipoTransacción TipoTransacción
+        public TipoOperación TipoOperación
         {
             get
             {
                 switch (Math.Sign(Quantity))
                 {
                     case (1):
-                        return TipoTransacción.Compra;
+                        return TipoOperación.Compra;
                     case (-1):
-                        return TipoTransacción.Venta;
+                        return TipoOperación.Venta;
                     default:
                         throw new Exception();
                 }
             }
         }
+
+        public TipoTransacción? TipoTransacción { get; set; }
     }
 }

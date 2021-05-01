@@ -4,6 +4,7 @@ using SJew.Entities.Models.Renta20;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace SJew.Business
 {
@@ -56,7 +57,7 @@ namespace SJew.Business
             return dayTransactions;
         }
 
-        public void Renta20()
+        public string Renta20()
         {
             Dictionary<string, List<Transacción>> transaccionesPorProducto = _transacciones
                 .GroupBy(x => x.Product)
@@ -73,113 +74,99 @@ namespace SJew.Business
             double balanceFirst = transmisionesPorProducto.Values.First().Sum(x => x.Beneficio);
             double balance = transmisionesPorProducto.Values.Select(x => x.Sum(x => x.Beneficio)).Sum();
 
-            return;
+            StringBuilder resultados = new StringBuilder();
+
+            foreach (KeyValuePair<string, List<Transmisión>> transmisionesProducto in transmisionesPorProducto.OrderBy(x => x.Key))
+            {
+                resultados.AppendFormat("{0}: {1} ({2}) \r\n", transmisionesProducto.Key, transmisionesProducto.Value.Sum(x => x.Beneficio), transmisionesProducto.Value.Count());
+            }
+
+            double beneficioTotal = transmisionesPorProducto.Values.SelectMany(x => x).Where(x => x.Beneficio > 0).Sum(x => x.Beneficio);
+            double pérdidaTotal = transmisionesPorProducto.Values.SelectMany(x => x).Where(x => x.Beneficio < 0).Sum(x => x.Beneficio);
+
+            return resultados.ToString();
         }
 
         private List<Transmisión> ObtenerTransmisionesProducto(List<Transacción> transacciones)
         {
             List<Transmisión> transmisiones = new List<Transmisión>();
+
             List<Transacción> transaccionesPorFecha = transacciones.OrderBy(x => x.Date).ToList();
 
-            TipoTransacción tipoApertura = transaccionesPorFecha.First().TipoTransacción;
-
-            TipoTransacción últimoTipo = transaccionesPorFecha.First().TipoTransacción;
-
-            List<Transacción> cierres = new List<Transacción>();
-
-            int potencialesAperturas = transaccionesPorFecha.Count();
-
-            for (int i = 0; i < potencialesAperturas; i++)
+            int títulosPendientesDeCierre = 0;
+            foreach (Transacción transacción in transaccionesPorFecha)
             {
-                Transacción transacción = transaccionesPorFecha.Where(x => !cierres.Contains(x)).ElementAt(i);
-
-                if (transacción.TipoTransacción == TipoTransacción.Venta)
+                if (transacción.TipoTransacción == null)
                 {
-                    throw new Exception();
-                }
-
-                int cierresConsolidados = 0;
-
-                var potencialesCierres = transaccionesPorFecha.Where(x => x.TipoTransacción != transacción.TipoTransacción && x.CierresDisponibles > 0);
-                for (int j = 0; j < potencialesCierres.Count(); j++)
-                {
-                    //TODO: El acceso por índice se está desfasando
-                    Transacción cierre = potencialesCierres.ElementAt(j);
-
-                    int pendienteConsolidar = Math.Abs(transacción.Quantity) - cierresConsolidados;
-                    if (pendienteConsolidar <= 0)
+                    if (Math.Abs(títulosPendientesDeCierre + transacción.Quantity) > Math.Abs(títulosPendientesDeCierre))
                     {
-                        //Todos los cierres consolidados
-                        cierresConsolidados = 0;
-                        break;
+                        //Continúa siendo apertura
+                        transacción.TipoTransacción = TipoTransacción.Apertura;
                     }
                     else
                     {
-                        cierres.Add(cierre);
-                        potencialesAperturas = transaccionesPorFecha.Where(x => !cierres.Contains(x)).Count();
-
-                        //Añadir cierre y continuar
-                        int títulosCerrados = (Math.Abs(cierre.CierresDisponibles) > pendienteConsolidar) ? pendienteConsolidar : Math.Abs(cierre.CierresDisponibles);
-                        cierresConsolidados += títulosCerrados;
-                        cierre.CierresConsolidados += títulosCerrados;
-                        continue;
+                        transacción.TipoTransacción = TipoTransacción.Cierre;
                     }
                 }
-            }
 
-            cierres = cierres.Distinct().OrderBy(x => x.Date).ToList();
-            List<Transacción> aperturas = transaccionesPorFecha.Except(cierres).ToList();
-
-            AsignarPosiciónTítulos(aperturas);
-            AsignarPosiciónTítulos(cierres);
-
-            foreach (Transacción apertura in aperturas)
-            {
-                apertura.Cierres = cierres.Where(x => x.TítuloInicial >= apertura.TítuloInicial && x.TítuloInicial <= apertura.TítuloFinal).ToList();
-            }
-
-            foreach (Transacción cierre in cierres)
-            {
-                cierre.Aperturas = aperturas.Where(x => x.TítuloInicial >= cierre.TítuloInicial && x.TítuloInicial <= cierre.TítuloFinal).ToList();
-            }
-
-            foreach (Transacción cierre in cierres)
-            {
-                foreach (Transacción apertura in cierre.Aperturas)
+                if (transacción.TipoTransacción == TipoTransacción.Cierre)
                 {
-                    int títulosTransmitidos = (cierre.TítuloFinal <= apertura.TítuloFinal) ? cierre.TítuloFinal - apertura.TítuloInicial + 1 : apertura.TítuloFinal - apertura.TítuloInicial + 1;
+                    continue;
+                }              
 
-                    if (títulosTransmitidos == 0)
+                títulosPendientesDeCierre += transacción.Quantity;
+
+                IEnumerable<Transacción> potencialesCierres = transaccionesPorFecha.Where(x => x.TipoOperación != transacción.TipoOperación && x.CierresDisponibles > 0);
+
+                foreach (Transacción cierre in potencialesCierres)
+                {
+                    if (títulosPendientesDeCierre == 0)
                     {
                         break;
                     }
 
-                    Transmisión transmisión = new Transmisión()
-                    { 
-                        FechaAdquisición = apertura.Date,
-                        FechaTransmisión = cierre.Date,
-                        ValorAdquisición = (apertura.Total.Ammount.Value / Math.Abs(apertura.Quantity)) * títulosTransmitidos,
-                        ValorTransmisión = (cierre.Total.Ammount.Value / Math.Abs(cierre.Quantity)) * títulosTransmitidos,
-                        AperturasPorTransacción = new Dictionary<Transacción, int>() { { apertura, títulosTransmitidos } },
-                        CierresPorTransacción = new Dictionary<Transacción, int>() { { cierre, títulosTransmitidos } }
-                    };
+                    cierre.TipoTransacción = TipoTransacción.Cierre;
 
-                    transmisiones.Add(transmisión);
+                    if (Math.Abs(títulosPendientesDeCierre) >= cierre.CierresDisponibles)
+                    {
+                        //Uso de todos los cierres disponibles
+                        int títulosCerrados = cierre.CierresDisponibles;
+                        títulosPendientesDeCierre += (títulosCerrados * Math.Sign(cierre.Quantity));
+                        cierre.CierresConsolidados += títulosCerrados;
+
+                        transmisiones.Add(CrearTransmisión(transmisiones, transacción, cierre, títulosCerrados));
+                        continue;
+                    }
+                    else
+                    {
+                        int títulosCerrados = Math.Abs(títulosPendientesDeCierre);
+                        cierre.CierresConsolidados += títulosCerrados;
+                        títulosPendientesDeCierre = 0;
+
+                        transmisiones.Add(CrearTransmisión(transmisiones, transacción, cierre, títulosCerrados));
+
+                        break;
+                    }
                 }
             }
 
             return transmisiones;
         }
 
-        private void AsignarPosiciónTítulos(List<Transacción> transacciones)
+        private Transmisión CrearTransmisión(List<Transmisión> transmisiones, Transacción apertura, Transacción cierre, int títulosCerrados)
         {
-            int últimoAsignado = -1;
-            foreach (Transacción transacción in transacciones.OrderBy(x => x.Date))
+            //double valorAdquisición = 
+
+            return new Transmisión()
             {
-                transacción.TítuloInicial = últimoAsignado + 1;
-                transacción.TítuloFinal = transacción.TítuloInicial + Math.Abs(transacción.Quantity) - 1;
-                últimoAsignado = transacción.TítuloFinal;
-            }
+                FechaAdquisición = apertura.Date,
+                FechaTransmisión = cierre.Date,
+                ValorAdquisición = (apertura.Value.Ammount.Value / Math.Abs(apertura.Quantity)) * títulosCerrados,
+                ValorTransmisión = (cierre.Value.Ammount.Value / Math.Abs(cierre.Quantity)) * títulosCerrados,
+                ValorAdquisiciónTotal = (apertura.Total.Ammount.Value / Math.Abs(apertura.Quantity)) * títulosCerrados,
+                ValorTransmisiónTotal = (cierre.Total.Ammount.Value / Math.Abs(cierre.Quantity)) * títulosCerrados,
+                NúmeroTítulos = títulosCerrados
+            };
         }
     }
 }

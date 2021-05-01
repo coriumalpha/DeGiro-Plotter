@@ -6,13 +6,7 @@ namespace Entities.Models.Renta20
 {
     public class Transmisión
     {
-        public int CantidadTítulos
-        {
-            get
-            {
-                return AperturasPorTransacción.Sum(x => x.Value);
-            }
-        }
+        public int NúmeroTítulos { get; set; }
         public double Beneficio
         {
             get
@@ -20,11 +14,18 @@ namespace Entities.Models.Renta20
                 return ValorTransmisión + ValorAdquisición;
             }
         }
+        public double BeneficioTotal
+        {
+            get
+            {
+                return ValorTransmisiónTotal + ValorAdquisiciónTotal;
+            }
+        }
         public DateTime FechaAdquisición { get; set; }
         public DateTime FechaTransmisión { get; set; }
-        public double ValorAdquisición { get; set; }
-        public double ValorTransmisión { get; set; }
-        public Dictionary<Transacción, int> AperturasPorTransacción { get; set; }
-        public Dictionary<Transacción, int> CierresPorTransacción { get; set; }
+        public double ValorAdquisición { get; set; } //En largo, negativo
+        public double ValorTransmisión { get; set; } //En largo, positivo
+        public double ValorAdquisiciónTotal { get; set; } //En largo, negativo
+        public double ValorTransmisiónTotal { get; set; } //En largo, positivo
     }
 }

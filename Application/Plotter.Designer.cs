@@ -38,6 +38,7 @@
             this.boxTotalCharges = new System.Windows.Forms.TextBox();
             this.GroupTotals = new System.Windows.Forms.GroupBox();
             this.gridTransactionsByDay = new System.Windows.Forms.DataGridView();
+            this.Renta20Text = new System.Windows.Forms.TextBox();
             this.GroupTotals.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridTransactionsByDay)).BeginInit();
             this.SuspendLayout();
@@ -148,12 +149,21 @@
             this.gridTransactionsByDay.TabIndex = 9;
             this.gridTransactionsByDay.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
+            // Renta20Text
+            // 
+            this.Renta20Text.Location = new System.Drawing.Point(1448, 19);
+            this.Renta20Text.Multiline = true;
+            this.Renta20Text.Name = "Renta20Text";
+            this.Renta20Text.Size = new System.Drawing.Size(1140, 1246);
+            this.Renta20Text.TabIndex = 10;
+            // 
             // Plotter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1427, 1277);
+            this.ClientSize = new System.Drawing.Size(2601, 1277);
+            this.Controls.Add(this.Renta20Text);
             this.Controls.Add(this.gridTransactionsByDay);
             this.Controls.Add(this.GroupTotals);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -163,6 +173,7 @@
             this.GroupTotals.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridTransactionsByDay)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -178,6 +189,7 @@
         private System.Windows.Forms.TextBox boxTotalCharges;
         private System.Windows.Forms.GroupBox GroupTotals;
         private System.Windows.Forms.DataGridView gridTransactionsByDay;
+        private System.Windows.Forms.TextBox Renta20Text;
     }
 }
 

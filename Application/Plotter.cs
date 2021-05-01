@@ -51,7 +51,8 @@ namespace GraphicalOperator
 
             DisplayTransactionsPerDay();
 
-            _reportService.Renta20();
+            string renta20 = _reportService.Renta20();
+            Renta20Text.Text = renta20;
         }
 
         public string GetCharges()

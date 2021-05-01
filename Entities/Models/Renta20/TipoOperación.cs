@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Entities.Models.Renta20
 {
-    public enum TipoTransacción
+    public enum TipoOperación
     {
-        Apertura,
-        Cierre
+        Compra,
+        Venta
     }
 }
