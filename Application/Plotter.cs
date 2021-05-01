@@ -50,6 +50,8 @@ namespace GraphicalOperator
             boxTotalCharges.Text = GetCharges();
 
             DisplayTransactionsPerDay();
+
+            _reportService.Renta20();
         }
 
         public string GetCharges()
