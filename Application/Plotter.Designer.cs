@@ -40,6 +40,7 @@
             this.gridTransmisiones = new System.Windows.Forms.DataGridView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.Renta20GlobalText = new System.Windows.Forms.TextBox();
+            this.GráficoTotales = new OxyPlot.WindowsForms.PlotView();
             this.GroupTotals.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridTransmisiones)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -147,7 +148,7 @@
             this.gridTransmisiones.ReadOnly = true;
             this.gridTransmisiones.RowHeadersWidth = 47;
             this.gridTransmisiones.RowTemplate.Height = 28;
-            this.gridTransmisiones.Size = new System.Drawing.Size(1436, 1037);
+            this.gridTransmisiones.Size = new System.Drawing.Size(1436, 656);
             this.gridTransmisiones.TabIndex = 9;
             // 
             // groupBox1
@@ -157,7 +158,7 @@
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox1.Size = new System.Drawing.Size(413, 254);
+            this.groupBox1.Size = new System.Drawing.Size(413, 814);
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Renta 20 Global";
@@ -168,8 +169,20 @@
             this.Renta20GlobalText.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Renta20GlobalText.Multiline = true;
             this.Renta20GlobalText.Name = "Renta20GlobalText";
-            this.Renta20GlobalText.Size = new System.Drawing.Size(399, 217);
+            this.Renta20GlobalText.Size = new System.Drawing.Size(399, 777);
             this.Renta20GlobalText.TabIndex = 0;
+            // 
+            // GráficoTotales
+            // 
+            this.GráficoTotales.Location = new System.Drawing.Point(433, 674);
+            this.GráficoTotales.Name = "GráficoTotales";
+            this.GráficoTotales.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.GráficoTotales.Size = new System.Drawing.Size(1436, 375);
+            this.GráficoTotales.TabIndex = 10;
+            this.GráficoTotales.Text = "plotView1";
+            this.GráficoTotales.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.GráficoTotales.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.GráficoTotales.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             // 
             // Plotter
             // 
@@ -177,6 +190,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1881, 1061);
+            this.Controls.Add(this.GráficoTotales);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.gridTransmisiones);
             this.Controls.Add(this.GroupTotals);
@@ -206,6 +220,7 @@
         private System.Windows.Forms.DataGridView gridTransmisiones;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox Renta20GlobalText;
+        private OxyPlot.WindowsForms.PlotView GráficoTotales;
     }
 }
 
