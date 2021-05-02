@@ -71,6 +71,8 @@ namespace SJew.Business
                 transmisionesPorProducto.Add(grupoProducto.Key, transmisiones);
             }
 
+            var sinCerrar = transaccionesPorProducto.Values.SelectMany(x => x).Where(x => x.CierresDisponibles != 0 && x.TipoTransacción == TipoTransacción.Cierre);
+
             return transmisionesPorProducto;
         }
 
@@ -103,7 +105,7 @@ namespace SJew.Business
 
                 títulosPendientesDeCierre += transacción.Quantity;
 
-                IEnumerable<Transacción> potencialesCierres = transaccionesPorFecha.Where(x => x.TipoOperación != transacción.TipoOperación && x.CierresDisponibles > 0);
+                IEnumerable<Transacción> potencialesCierres = transaccionesPorFecha.Where(x => x.TipoOperación != transacción.TipoOperación && x.CierresDisponibles > 0 && x.TipoTransacción != TipoTransacción.Apertura);
 
                 foreach (Transacción cierre in potencialesCierres)
                 {
@@ -121,7 +123,7 @@ namespace SJew.Business
                         títulosPendientesDeCierre += (títulosCerrados * Math.Sign(cierre.Quantity));
                         cierre.CierresConsolidados += títulosCerrados;
 
-                        transmisiones.Add(CrearTransmisión(transmisiones, transacción, cierre, títulosCerrados));
+                        transmisiones.Add(CrearTransmisión(transacción, cierre, títulosCerrados));
                         continue;
                     }
                     else
@@ -130,7 +132,7 @@ namespace SJew.Business
                         cierre.CierresConsolidados += títulosCerrados;
                         títulosPendientesDeCierre = 0;
 
-                        transmisiones.Add(CrearTransmisión(transmisiones, transacción, cierre, títulosCerrados));
+                        transmisiones.Add(CrearTransmisión(transacción, cierre, títulosCerrados));
 
                         break;
                     }
@@ -140,10 +142,13 @@ namespace SJew.Business
             return transmisiones;
         }
 
-        private Transmisión CrearTransmisión(List<Transmisión> transmisiones, Transacción apertura, Transacción cierre, int títulosCerrados)
+        private Transmisión CrearTransmisión(Transacción apertura, Transacción cierre, int títulosCerrados)
         {
             double valorComisionesApertura = ((apertura.Charge.Ammount ?? 0) / Math.Abs(apertura.Quantity)) * títulosCerrados;
             double valorComisionesCierre = ((cierre.Charge.Ammount ?? 0) / Math.Abs(cierre.Quantity)) * títulosCerrados;
+
+            if (apertura.Charge.Currency != "EUR" && !String.IsNullOrEmpty(apertura.Charge.Currency)) throw new Exception();
+            if (cierre.Charge.Currency != "EUR" && !String.IsNullOrEmpty(cierre.Charge.Currency)) throw new Exception();
 
             return new Transmisión()
             {
@@ -164,7 +169,7 @@ namespace SJew.Business
 
             foreach (KeyValuePair<string, List<Transmisión>> transmisionesProducto in transmisionesPorProducto.OrderBy(x => x.Key))
             {
-                resultados.AppendFormat("{0}: {1} ({2}) \r\n", transmisionesProducto.Key, transmisionesProducto.Value.Sum(x => x.BeneficioTotal), transmisionesProducto.Value.Count());
+                resultados.AppendFormat("{0}: {1} ({2}) [Com. {3}] \r\n", transmisionesProducto.Key, transmisionesProducto.Value.Sum(x => x.BeneficioTotal), transmisionesProducto.Value.Count(), transmisionesProducto.Value.Sum(x => x.ValorComisiones));
             }
 
             return resultados.ToString();
@@ -181,12 +186,14 @@ namespace SJew.Business
             double valorComisiones = transmisionesPorProducto.Values.SelectMany(x => x).Sum(x => x.ValorComisiones);
 
 
+            reporte.AppendLine(string.Format("Valor comisiones: {0}", valorComisiones));
             reporte.AppendLine(string.Format("Beneficio: {0}", beneficio));
             reporte.AppendLine(string.Format("Beneficio total: {0}", beneficioTotal));
             reporte.AppendLine(string.Format("Pérdida: {0}", pérdida));
             reporte.AppendLine(string.Format("Pérdida total: {0}", pérdidaTotal));
-            reporte.AppendLine(string.Format("Valor comisiones: {0}", valorComisiones));
+            reporte.AppendLine(string.Format("Diferencia: {0}", beneficio + pérdida));
             reporte.AppendLine(string.Format("Diferencia totales: {0}", beneficioTotal + pérdidaTotal));
+            reporte.AppendLine(string.Format("Comisiones (estimado por diferencia): {0}", (beneficio + pérdida) - (beneficioTotal + pérdidaTotal)));
 
             return reporte.ToString();
         }
