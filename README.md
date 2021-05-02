@@ -1,28 +1,7 @@
-# DeGiro Plotter [Pre-Alpha 0.0.2]
+# Agrupación DeGiro para Renta 20 Bizkaia
 
-The application is aimed at the validation and verification of the data provided by DeGiro through the comparison of the CSV files provided by it. In the future, graphing and projection capabilities will be added.
+## Transmisión de Elementos Patrimoniales
 
-## Changelog
-
-### Pre-Alpha 0.0.3
-
-  - [ ] Parse Account State CSV
-  - [ ] Get invested volume
-  - [ ] Get retrieved volume
-  - [ ] Calculate P/L %
-  - [ ] Allow CSV loading via GUI
-  - [ ] Add real time currency exchange support (API)
-  
-### Pre-Alpha 0.0.2  [Released]
-  
-  - [x] Add GUI (.NET Core WinForms)
-  - [x] Remove CLI (Console app)
-  - [x] Unused project cleanup
-  
-### Pre-Alpha 0.0.1 [Released]
-
-  - [x] Parse Transactions CSV
-  - [x] Parse Portfolio CSV
-  - [x] Calculate total revenue (from local value)
-  - [x] Calculate total revenue (from account currency)
-  - [x] Calculate total charges (in EUR?)
+- [x]  Carga de Transacciones y Portfolio (este último no es teóricamente necesario)
+- [x]  Creación de Transmisiones a partir de la relación de transacciones de apertura y cierre
+- [x]  Simplificación de las transacciones vía agrupación por producto y día
