@@ -1,6 +1,5 @@
 ﻿using Entities.Models.Renta20;
 using SJew.Entities.Models.Base;
-using SJew.Entities.Models.Renta20;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,25 +37,6 @@ namespace SJew.Business
             }).ToList();
         }
 
-        public List<DayTransactions> TransactionsPerDay()
-        {
-            Dictionary<DateTime, List<Transaction>> transactionsPerDay = _transactions
-                .OrderBy(x => x.Date)
-                .GroupBy(x => x.Date.Date)
-                .ToDictionary(x => x.Key, x => x.ToList());
-
-            List<DayTransactions> dayTransactions = transactionsPerDay
-                .Select(x => new DayTransactions()
-                {
-                    Date = x.Key,
-                    Value = new AmmountCurrency(x.Value.Sum(x => x.Value.Ammount), x.Value.First().Value.Currency),
-                    Charge = new AmmountCurrency(x.Value.Sum(x => x.Charge.Ammount), x.Value.First().Charge.Currency),
-                    Total = new AmmountCurrency(x.Value.Sum(x => x.Total.Ammount), x.Value.First().Total.Currency)
-                }).ToList();
-
-            return dayTransactions;
-        }
-
         public Dictionary<string, List<Transmisión>> Renta20()
         {
             Dictionary<string, List<Transacción>> transaccionesPorProducto = _transacciones
@@ -69,10 +49,9 @@ namespace SJew.Business
             {
                 List<Transmisión> transmisiones = ObtenerTransmisionesProducto(grupoProducto.Value);
                 List<Transmisión> transmisionesSimplificadas = SimplificarTransmisionesProducto(transmisiones);
-                transmisionesPorProducto.Add(grupoProducto.Key, transmisiones);
-            }
 
-            var sinCerrar = transaccionesPorProducto.Values.SelectMany(x => x).Where(x => x.TítulosSinCierre != 0);
+                transmisionesPorProducto.Add(grupoProducto.Key, transmisionesSimplificadas);
+            }
 
             return transmisionesPorProducto;
         }
@@ -80,13 +59,57 @@ namespace SJew.Business
         public List<Transmisión> SimplificarTransmisionesProducto(List<Transmisión> transmisiones)
         {
             List<Transmisión> transmisionesSimplificadas = new List<Transmisión>();
+            transmisionesSimplificadas.AddRange(transmisiones);
 
-            var transmisionesSimplificables = transmisiones.Where(x => transmisiones.Except(new List<Transmisión>() { x }).Where(y => y.FechaAdquisición.Date == x.FechaAdquisición.Date && y.FechaTransmisión.Date == x.FechaTransmisión.Date).Any()).ToList();
+            var transmisionesSimplificables = transmisiones
+                .Where(x => transmisiones
+                    .Except(new List<Transmisión>() { x })
+                    .Where(y => y.FechaAdquisición.Date == x.FechaAdquisición.Date && y.FechaTransmisión.Date == x.FechaTransmisión.Date)
+                    .Any())
+                .ToList()
+                .GroupBy(x => x.FechaAdquisición.Date);
 
-            //TODO: Cuidado, podría admitir nuevas aperturas dentro de cierres del mismo día ¿Afectaría?
-            //Deduzco que habrá que plantear un mecanismo que deduzca si se están anulando entre si para poder agruparse
+            
+            foreach (Transmisión transmisiónSimplificable in transmisionesSimplificables.SelectMany(x => x))
+            {
+                transmisionesSimplificadas.Remove(transmisiónSimplificable);
+            }
+
+            foreach (IGrouping<DateTime, Transmisión> grupoTransmisionesDía in transmisionesSimplificables)
+            {
+                List<Transmisión> transmisionesDía = grupoTransmisionesDía.ToList();
+
+                List<Transmisión> largos = transmisionesDía.Where(x => x.TipoTransmisión == TipoTransmisión.Largo).ToList();
+                List<Transmisión> cortos = transmisionesDía.Where(x => x.TipoTransmisión == TipoTransmisión.Corto).ToList();
+
+                foreach (List<Transmisión> grupoSimplificable in new List<Transmisión>[] { largos, cortos })
+                {
+                    if (grupoSimplificable.Any())
+                    {
+                        transmisionesSimplificadas.Add(AgruparTransmisiones(grupoSimplificable));
+                    }
+                }               
+               
+            }
 
             return transmisionesSimplificadas;
+        }
+
+        private Transmisión AgruparTransmisiones(List<Transmisión> transmisiones)
+        { 
+            return new Transmisión()
+            {
+                TipoTransmisión = transmisiones.First().TipoTransmisión,
+                Producto = transmisiones.First().Producto,
+                FechaAdquisición = transmisiones.Min(x => x.FechaAdquisición),
+                FechaTransmisión = transmisiones.Max(x => x.FechaTransmisión),
+                NúmeroTítulos = transmisiones.Sum(x => x.NúmeroTítulos),
+                ValorAdquisición = transmisiones.Sum(x => x.ValorAdquisición),
+                ValorAdquisiciónTotal = transmisiones.Sum(x => x.ValorAdquisiciónTotal),
+                ValorTransmisión = transmisiones.Sum(x => x.ValorTransmisión),
+                ValorTransmisiónTotal = transmisiones.Sum(x => x.ValorTransmisiónTotal),
+                ValorComisiones = transmisiones.Sum(x => x.ValorComisiones)
+            };
         }
 
         private List<Transmisión> ObtenerTransmisionesProducto(List<Transacción> transacciones)
@@ -177,7 +200,8 @@ namespace SJew.Business
                 ValorAdquisiciónTotal = (apertura.Total.Ammount.Value / Math.Abs(apertura.Quantity)) * títulosCerrados,
                 ValorTransmisiónTotal = (cierre.Total.Ammount.Value / Math.Abs(cierre.Quantity)) * títulosCerrados,
                 ValorComisiones = valorComisionesApertura + valorComisionesCierre,
-                NúmeroTítulos = títulosCerrados
+                NúmeroTítulos = títulosCerrados,
+                TipoTransmisión = (apertura.TipoOperación == TipoOperación.Compra) ? TipoTransmisión.Largo : TipoTransmisión.Corto
             };
         }
 

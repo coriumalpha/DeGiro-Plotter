@@ -1,7 +1,6 @@
 ﻿using Entities.Models.Renta20;
 using SJew.Business;
 using SJew.Entities.Models.Base;
-using SJew.Entities.Models.Renta20;
 using System;
 using System.Collections.Generic;
 using System.Linq;

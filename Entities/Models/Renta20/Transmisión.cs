@@ -29,5 +29,6 @@ namespace Entities.Models.Renta20
         public double ValorAdquisiciónTotal { get; set; }
         public double ValorTransmisiónTotal { get; set; }
         public double ValorComisiones { get; set; }
+        public TipoTransmisión TipoTransmisión { get; set; }
     }
 }
