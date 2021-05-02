@@ -71,7 +71,7 @@ namespace SJew.Business
                 transmisionesPorProducto.Add(grupoProducto.Key, transmisiones);
             }
 
-            var sinCerrar = transaccionesPorProducto.Values.SelectMany(x => x).Where(x => x.CierresDisponibles != 0 && x.TipoTransacción == TipoTransacción.Cierre);
+            var sinCerrar = transaccionesPorProducto.Values.SelectMany(x => x).Where(x => x.TítulosSinCierre != 0);
 
             return transmisionesPorProducto;
         }
@@ -137,6 +137,11 @@ namespace SJew.Business
                         break;
                     }
                 }
+
+                if (títulosPendientesDeCierre > 0)
+                {
+                    transacción.TítulosSinCierre = títulosPendientesDeCierre;
+                }
             }
 
             return transmisiones;
@@ -144,14 +149,14 @@ namespace SJew.Business
 
         private Transmisión CrearTransmisión(Transacción apertura, Transacción cierre, int títulosCerrados)
         {
+            string producto = apertura.Product;
+
             double valorComisionesApertura = ((apertura.Charge.Ammount ?? 0) / Math.Abs(apertura.Quantity)) * títulosCerrados;
             double valorComisionesCierre = ((cierre.Charge.Ammount ?? 0) / Math.Abs(cierre.Quantity)) * títulosCerrados;
 
-            if (apertura.Charge.Currency != "EUR" && !String.IsNullOrEmpty(apertura.Charge.Currency)) throw new Exception();
-            if (cierre.Charge.Currency != "EUR" && !String.IsNullOrEmpty(cierre.Charge.Currency)) throw new Exception();
-
             return new Transmisión()
             {
+                Producto = producto,
                 FechaAdquisición = apertura.Date,
                 FechaTransmisión = cierre.Date,
                 ValorAdquisición = (apertura.Value.Ammount.Value / Math.Abs(apertura.Quantity)) * títulosCerrados,
@@ -163,18 +168,6 @@ namespace SJew.Business
             };
         }
 
-        public string ReporteTransmisionesPorProducto(Dictionary<string, List<Transmisión>> transmisionesPorProducto)
-        {
-            StringBuilder resultados = new StringBuilder();
-
-            foreach (KeyValuePair<string, List<Transmisión>> transmisionesProducto in transmisionesPorProducto.OrderBy(x => x.Key))
-            {
-                resultados.AppendFormat("{0}: {1} ({2}) [Com. {3}] \r\n", transmisionesProducto.Key, transmisionesProducto.Value.Sum(x => x.BeneficioTotal), transmisionesProducto.Value.Count(), transmisionesProducto.Value.Sum(x => x.ValorComisiones));
-            }
-
-            return resultados.ToString();
-        }
-
         public string ReporteGlobales(Dictionary<string, List<Transmisión>> transmisionesPorProducto)
         {
             StringBuilder reporte = new StringBuilder();
@@ -184,6 +177,7 @@ namespace SJew.Business
             double beneficioTotal = transmisionesPorProducto.Values.SelectMany(x => x).Where(x => x.BeneficioTotal > 0).Sum(x => x.BeneficioTotal);
             double pérdidaTotal = transmisionesPorProducto.Values.SelectMany(x => x).Where(x => x.BeneficioTotal < 0).Sum(x => x.BeneficioTotal);
             double valorComisiones = transmisionesPorProducto.Values.SelectMany(x => x).Sum(x => x.ValorComisiones);
+            double granTotal = transmisionesPorProducto.Values.SelectMany(x => x).Sum(x => x.BeneficioTotal);
 
 
             reporte.AppendLine(string.Format("Valor comisiones: {0}", valorComisiones));
@@ -194,6 +188,8 @@ namespace SJew.Business
             reporte.AppendLine(string.Format("Diferencia: {0}", beneficio + pérdida));
             reporte.AppendLine(string.Format("Diferencia totales: {0}", beneficioTotal + pérdidaTotal));
             reporte.AppendLine(string.Format("Comisiones (estimado por diferencia): {0}", (beneficio + pérdida) - (beneficioTotal + pérdidaTotal)));
+            reporte.AppendLine(string.Format("Número de transmisiones: {0}", transmisionesPorProducto.Values.SelectMany(x => x).Count()));
+            reporte.AppendLine(string.Format("Gran total: {0}", granTotal));
 
             return reporte.ToString();
         }

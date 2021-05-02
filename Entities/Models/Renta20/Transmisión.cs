@@ -6,6 +6,7 @@ namespace Entities.Models.Renta20
 {
     public class Transmisión
     {
+        public string Producto { get; set; }
         public int NúmeroTítulos { get; set; }
         public double Beneficio
         {
@@ -23,10 +24,10 @@ namespace Entities.Models.Renta20
         }
         public DateTime FechaAdquisición { get; set; }
         public DateTime FechaTransmisión { get; set; }
-        public double ValorAdquisición { get; set; } //En largo, negativo
-        public double ValorTransmisión { get; set; } //En largo, positivo
-        public double ValorAdquisiciónTotal { get; set; } //En largo, negativo
-        public double ValorTransmisiónTotal { get; set; } //En largo, positivo
+        public double ValorAdquisición { get; set; }
+        public double ValorTransmisión { get; set; }
+        public double ValorAdquisiciónTotal { get; set; }
+        public double ValorTransmisiónTotal { get; set; }
         public double ValorComisiones { get; set; }
     }
 }

@@ -7,8 +7,6 @@ namespace Entities.Models.Renta20
 {
     public class Transacción : Transaction
     {
-        public int TítuloInicial { get; set; }
-        public int TítuloFinal { get; set; }
         public int CierresConsolidados { get; set; }
         public int CierresDisponibles
         {
@@ -17,8 +15,6 @@ namespace Entities.Models.Renta20
                 return Math.Abs(Quantity) - CierresConsolidados;
             }
         }
-        public List<Transacción> Aperturas { get; set; }
-        public List<Transacción> Cierres { get; set; }
         public TipoOperación TipoOperación
         {
             get
@@ -36,5 +32,6 @@ namespace Entities.Models.Renta20
         }
 
         public TipoTransacción? TipoTransacción { get; set; }
+        public int TítulosSinCierre { get; set; }
     }
 }

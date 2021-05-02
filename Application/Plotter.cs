@@ -50,13 +50,12 @@ namespace GraphicalOperator
 
             boxTotalCharges.Text = GetCharges();
 
-            DisplayTransactionsPerDay();
-
             Dictionary<string, List<Transmisión>> reporteRenta = _reportService.Renta20();
 
+            DisplayTransactionsPerDay(reporteRenta);
             Renta20GlobalText.Text = _reportService.ReporteGlobales(reporteRenta);
 
-            Renta20Text.Text = _reportService.ReporteTransmisionesPorProducto(reporteRenta);
+            //Renta20Text.Text = _reportService.ReporteTransmisionesPorProducto(reporteRenta);
         }
 
         public string GetCharges()
@@ -77,24 +76,22 @@ namespace GraphicalOperator
             return totalRevenue;
         }
 
-        public void DisplayTransactionsPerDay()
+        public void DisplayTransactionsPerDay(Dictionary<string, List<Transmisión>> renta20)
         {
-            List<DayTransactions> dayTransactions = _reportService.TransactionsPerDay();
+            List<Transmisión> transmisiones = renta20.Values.SelectMany(x => x).ToList();
 
-            gridTransactionsByDay.DataSource = dayTransactions.Select(x => new { 
-                Date = x.Date,
-                Total = x.Total.Ammount,
-                Value = x.Value.Ammount,
-                Charge = x.Value.Ammount,
-                TotalCurrency = x.Total.Currency,
-                ValueCurrency = x.Value.Currency,
-                ChargeCurrency = x.Charge.Currency
+            gridTransmisiones.DataSource = transmisiones.OrderBy(x => x.FechaAdquisición).Select(x => new { 
+                Producto = x.Producto,
+                Beneficio = x.BeneficioTotal.ToString("0.##"),
+                FechaAdquisición = x.FechaAdquisición,
+                FechaTransmisión = x.FechaTransmisión,
+                Títulos = x.NúmeroTítulos,
+                Comisiones = x.ValorComisiones.ToString("0.##"),
+                ValorAquisición = x.ValorAdquisiciónTotal.ToString("0.##"),
+                ValorTransmisión = x.ValorTransmisiónTotal.ToString("0.##")
             }).ToList();
-        }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
+            gridTransmisiones.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
         }
     }
 }

@@ -37,12 +37,11 @@
             this.lblTotalCharges = new System.Windows.Forms.Label();
             this.boxTotalCharges = new System.Windows.Forms.TextBox();
             this.GroupTotals = new System.Windows.Forms.GroupBox();
-            this.gridTransactionsByDay = new System.Windows.Forms.DataGridView();
-            this.Renta20Text = new System.Windows.Forms.TextBox();
+            this.gridTransmisiones = new System.Windows.Forms.DataGridView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.Renta20GlobalText = new System.Windows.Forms.TextBox();
             this.GroupTotals.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gridTransactionsByDay)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridTransmisiones)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -138,28 +137,18 @@
             this.GroupTotals.TabStop = false;
             this.GroupTotals.Text = "Totals";
             // 
-            // gridTransactionsByDay
+            // gridTransmisiones
             // 
-            this.gridTransactionsByDay.AllowUserToAddRows = false;
-            this.gridTransactionsByDay.AllowUserToDeleteRows = false;
-            this.gridTransactionsByDay.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.gridTransactionsByDay.Location = new System.Drawing.Point(1171, 15);
-            this.gridTransactionsByDay.Name = "gridTransactionsByDay";
-            this.gridTransactionsByDay.ReadOnly = true;
-            this.gridTransactionsByDay.RowHeadersWidth = 47;
-            this.gridTransactionsByDay.RowTemplate.Height = 28;
-            this.gridTransactionsByDay.Size = new System.Drawing.Size(886, 1032);
-            this.gridTransactionsByDay.TabIndex = 9;
-            this.gridTransactionsByDay.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
-            // 
-            // Renta20Text
-            // 
-            this.Renta20Text.Location = new System.Drawing.Point(433, 15);
-            this.Renta20Text.Multiline = true;
-            this.Renta20Text.Name = "Renta20Text";
-            this.Renta20Text.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.Renta20Text.Size = new System.Drawing.Size(732, 1031);
-            this.Renta20Text.TabIndex = 10;
+            this.gridTransmisiones.AllowUserToAddRows = false;
+            this.gridTransmisiones.AllowUserToDeleteRows = false;
+            this.gridTransmisiones.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gridTransmisiones.Location = new System.Drawing.Point(433, 12);
+            this.gridTransmisiones.Name = "gridTransmisiones";
+            this.gridTransmisiones.ReadOnly = true;
+            this.gridTransmisiones.RowHeadersWidth = 47;
+            this.gridTransmisiones.RowTemplate.Height = 28;
+            this.gridTransmisiones.Size = new System.Drawing.Size(1436, 1037);
+            this.gridTransmisiones.TabIndex = 9;
             // 
             // groupBox1
             // 
@@ -168,7 +157,7 @@
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox1.Size = new System.Drawing.Size(413, 212);
+            this.groupBox1.Size = new System.Drawing.Size(413, 254);
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Renta 20 Global";
@@ -179,7 +168,7 @@
             this.Renta20GlobalText.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Renta20GlobalText.Multiline = true;
             this.Renta20GlobalText.Name = "Renta20GlobalText";
-            this.Renta20GlobalText.Size = new System.Drawing.Size(399, 174);
+            this.Renta20GlobalText.Size = new System.Drawing.Size(399, 217);
             this.Renta20GlobalText.TabIndex = 0;
             // 
             // Plotter
@@ -187,21 +176,19 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(2071, 1061);
+            this.ClientSize = new System.Drawing.Size(1881, 1061);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.Renta20Text);
-            this.Controls.Add(this.gridTransactionsByDay);
+            this.Controls.Add(this.gridTransmisiones);
             this.Controls.Add(this.GroupTotals);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Plotter";
-            this.Text = "DeGiro Plotter";
+            this.Text = "DeGiro Plotter (Modo Renta 20)";
             this.GroupTotals.ResumeLayout(false);
             this.GroupTotals.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gridTransactionsByDay)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridTransmisiones)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -216,8 +203,7 @@
         private System.Windows.Forms.Label lblTotalCharges;
         private System.Windows.Forms.TextBox boxTotalCharges;
         private System.Windows.Forms.GroupBox GroupTotals;
-        private System.Windows.Forms.DataGridView gridTransactionsByDay;
-        private System.Windows.Forms.TextBox Renta20Text;
+        private System.Windows.Forms.DataGridView gridTransmisiones;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox Renta20GlobalText;
     }

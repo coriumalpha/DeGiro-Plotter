@@ -19,6 +19,7 @@ namespace SJew.Business
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
                 csv.Configuration.HasHeaderRecord = true;
+                csv.Configuration.Delimiter = ",";
                 csv.Configuration.RegisterClassMap<TransactionMapper>();
                 IEnumerable<Transaction> records = csv.GetRecords<Transaction>();
 
