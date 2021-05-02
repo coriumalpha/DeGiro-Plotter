@@ -78,11 +78,16 @@ namespace SJew.Business
 
             foreach (KeyValuePair<string, List<Transmisión>> transmisionesProducto in transmisionesPorProducto.OrderBy(x => x.Key))
             {
-                resultados.AppendFormat("{0}: {1} ({2}) \r\n", transmisionesProducto.Key, transmisionesProducto.Value.Sum(x => x.Beneficio), transmisionesProducto.Value.Count());
+                resultados.AppendFormat("{0}: {1} ({2}) \r\n", transmisionesProducto.Key, transmisionesProducto.Value.Sum(x => x.BeneficioTotal), transmisionesProducto.Value.Count());
             }
 
-            double beneficioTotal = transmisionesPorProducto.Values.SelectMany(x => x).Where(x => x.Beneficio > 0).Sum(x => x.Beneficio);
-            double pérdidaTotal = transmisionesPorProducto.Values.SelectMany(x => x).Where(x => x.Beneficio < 0).Sum(x => x.Beneficio);
+            double beneficio = transmisionesPorProducto.Values.SelectMany(x => x).Where(x => x.Beneficio > 0).Sum(x => x.Beneficio);
+            double pérdida = transmisionesPorProducto.Values.SelectMany(x => x).Where(x => x.Beneficio < 0).Sum(x => x.Beneficio);
+            double beneficioTotal = transmisionesPorProducto.Values.SelectMany(x => x).Where(x => x.BeneficioTotal > 0).Sum(x => x.BeneficioTotal);
+            double pérdidaTotal = transmisionesPorProducto.Values.SelectMany(x => x).Where(x => x.BeneficioTotal < 0).Sum(x => x.BeneficioTotal);
+            double valorComisiones = transmisionesPorProducto.Values.SelectMany(x => x).Sum(x => x.ValorComisiones);
+
+            resultados.AppendLine(String.Format("Beneficio: {0}, BeneficioTotal: {1}, Pérdida: {2}, PérdidaTotal: {3}, ValorComisiones: {4}, DiferenciaTotales: {5}", beneficio, beneficioTotal, pérdida, pérdidaTotal, valorComisiones, beneficioTotal + pérdidaTotal));
 
             return resultados.ToString();
         }
@@ -155,7 +160,8 @@ namespace SJew.Business
 
         private Transmisión CrearTransmisión(List<Transmisión> transmisiones, Transacción apertura, Transacción cierre, int títulosCerrados)
         {
-            //double valorAdquisición = 
+            double valorComisionesApertura = ((apertura.Charge.Ammount ?? 0) / Math.Abs(apertura.Quantity)) * títulosCerrados;
+            double valorComisionesCierre = ((cierre.Charge.Ammount ?? 0) / Math.Abs(cierre.Quantity)) * títulosCerrados;
 
             return new Transmisión()
             {
@@ -165,6 +171,7 @@ namespace SJew.Business
                 ValorTransmisión = (cierre.Value.Ammount.Value / Math.Abs(cierre.Quantity)) * títulosCerrados,
                 ValorAdquisiciónTotal = (apertura.Total.Ammount.Value / Math.Abs(apertura.Quantity)) * títulosCerrados,
                 ValorTransmisiónTotal = (cierre.Total.Ammount.Value / Math.Abs(cierre.Quantity)) * títulosCerrados,
+                ValorComisiones = valorComisionesApertura + valorComisionesCierre,
                 NúmeroTítulos = títulosCerrados
             };
         }

@@ -145,7 +145,7 @@
             this.gridTransactionsByDay.ReadOnly = true;
             this.gridTransactionsByDay.RowHeadersWidth = 47;
             this.gridTransactionsByDay.RowTemplate.Height = 28;
-            this.gridTransactionsByDay.Size = new System.Drawing.Size(1059, 1250);
+            this.gridTransactionsByDay.Size = new System.Drawing.Size(1059, 1383);
             this.gridTransactionsByDay.TabIndex = 9;
             this.gridTransactionsByDay.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
@@ -154,7 +154,7 @@
             this.Renta20Text.Location = new System.Drawing.Point(1448, 19);
             this.Renta20Text.Multiline = true;
             this.Renta20Text.Name = "Renta20Text";
-            this.Renta20Text.Size = new System.Drawing.Size(1140, 1246);
+            this.Renta20Text.Size = new System.Drawing.Size(1140, 1379);
             this.Renta20Text.TabIndex = 10;
             // 
             // Plotter
@@ -162,7 +162,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(2601, 1277);
+            this.ClientSize = new System.Drawing.Size(2601, 1410);
             this.Controls.Add(this.Renta20Text);
             this.Controls.Add(this.gridTransactionsByDay);
             this.Controls.Add(this.GroupTotals);
