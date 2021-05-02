@@ -68,12 +68,25 @@ namespace SJew.Business
             foreach (KeyValuePair<string, List<Transacción>> grupoProducto in transaccionesPorProducto)
             {
                 List<Transmisión> transmisiones = ObtenerTransmisionesProducto(grupoProducto.Value);
+                List<Transmisión> transmisionesSimplificadas = SimplificarTransmisionesProducto(transmisiones);
                 transmisionesPorProducto.Add(grupoProducto.Key, transmisiones);
             }
 
             var sinCerrar = transaccionesPorProducto.Values.SelectMany(x => x).Where(x => x.TítulosSinCierre != 0);
 
             return transmisionesPorProducto;
+        }
+
+        public List<Transmisión> SimplificarTransmisionesProducto(List<Transmisión> transmisiones)
+        {
+            List<Transmisión> transmisionesSimplificadas = new List<Transmisión>();
+
+            var transmisionesSimplificables = transmisiones.Where(x => transmisiones.Except(new List<Transmisión>() { x }).Where(y => y.FechaAdquisición.Date == x.FechaAdquisición.Date && y.FechaTransmisión.Date == x.FechaTransmisión.Date).Any()).ToList();
+
+            //TODO: Cuidado, podría admitir nuevas aperturas dentro de cierres del mismo día ¿Afectaría?
+            //Deduzco que habrá que plantear un mecanismo que deduzca si se están anulando entre si para poder agruparse
+
+            return transmisionesSimplificadas;
         }
 
         private List<Transmisión> ObtenerTransmisionesProducto(List<Transacción> transacciones)
