@@ -1,4 +1,5 @@
-﻿using SJew.Business;
+﻿using Entities.Models.Renta20;
+using SJew.Business;
 using SJew.Entities.Models.Base;
 using SJew.Entities.Models.Renta20;
 using System;
@@ -51,8 +52,11 @@ namespace GraphicalOperator
 
             DisplayTransactionsPerDay();
 
-            string renta20 = _reportService.Renta20();
-            Renta20Text.Text = renta20;
+            Dictionary<string, List<Transmisión>> reporteRenta = _reportService.Renta20();
+
+            Renta20GlobalText.Text = _reportService.ReporteGlobales(reporteRenta);
+
+            Renta20Text.Text = _reportService.ReporteTransmisionesPorProducto(reporteRenta);
         }
 
         public string GetCharges()

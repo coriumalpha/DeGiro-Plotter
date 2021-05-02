@@ -57,7 +57,7 @@ namespace SJew.Business
             return dayTransactions;
         }
 
-        public string Renta20()
+        public Dictionary<string, List<Transmisión>> Renta20()
         {
             Dictionary<string, List<Transacción>> transaccionesPorProducto = _transacciones
                 .GroupBy(x => x.Product)
@@ -71,25 +71,7 @@ namespace SJew.Business
                 transmisionesPorProducto.Add(grupoProducto.Key, transmisiones);
             }
 
-            double balanceFirst = transmisionesPorProducto.Values.First().Sum(x => x.Beneficio);
-            double balance = transmisionesPorProducto.Values.Select(x => x.Sum(x => x.Beneficio)).Sum();
-
-            StringBuilder resultados = new StringBuilder();
-
-            foreach (KeyValuePair<string, List<Transmisión>> transmisionesProducto in transmisionesPorProducto.OrderBy(x => x.Key))
-            {
-                resultados.AppendFormat("{0}: {1} ({2}) \r\n", transmisionesProducto.Key, transmisionesProducto.Value.Sum(x => x.BeneficioTotal), transmisionesProducto.Value.Count());
-            }
-
-            double beneficio = transmisionesPorProducto.Values.SelectMany(x => x).Where(x => x.Beneficio > 0).Sum(x => x.Beneficio);
-            double pérdida = transmisionesPorProducto.Values.SelectMany(x => x).Where(x => x.Beneficio < 0).Sum(x => x.Beneficio);
-            double beneficioTotal = transmisionesPorProducto.Values.SelectMany(x => x).Where(x => x.BeneficioTotal > 0).Sum(x => x.BeneficioTotal);
-            double pérdidaTotal = transmisionesPorProducto.Values.SelectMany(x => x).Where(x => x.BeneficioTotal < 0).Sum(x => x.BeneficioTotal);
-            double valorComisiones = transmisionesPorProducto.Values.SelectMany(x => x).Sum(x => x.ValorComisiones);
-
-            resultados.AppendLine(String.Format("Beneficio: {0}, BeneficioTotal: {1}, Pérdida: {2}, PérdidaTotal: {3}, ValorComisiones: {4}, DiferenciaTotales: {5}", beneficio, beneficioTotal, pérdida, pérdidaTotal, valorComisiones, beneficioTotal + pérdidaTotal));
-
-            return resultados.ToString();
+            return transmisionesPorProducto;
         }
 
         private List<Transmisión> ObtenerTransmisionesProducto(List<Transacción> transacciones)
@@ -174,6 +156,39 @@ namespace SJew.Business
                 ValorComisiones = valorComisionesApertura + valorComisionesCierre,
                 NúmeroTítulos = títulosCerrados
             };
+        }
+
+        public string ReporteTransmisionesPorProducto(Dictionary<string, List<Transmisión>> transmisionesPorProducto)
+        {
+            StringBuilder resultados = new StringBuilder();
+
+            foreach (KeyValuePair<string, List<Transmisión>> transmisionesProducto in transmisionesPorProducto.OrderBy(x => x.Key))
+            {
+                resultados.AppendFormat("{0}: {1} ({2}) \r\n", transmisionesProducto.Key, transmisionesProducto.Value.Sum(x => x.BeneficioTotal), transmisionesProducto.Value.Count());
+            }
+
+            return resultados.ToString();
+        }
+
+        public string ReporteGlobales(Dictionary<string, List<Transmisión>> transmisionesPorProducto)
+        {
+            StringBuilder reporte = new StringBuilder();
+
+            double beneficio = transmisionesPorProducto.Values.SelectMany(x => x).Where(x => x.Beneficio > 0).Sum(x => x.Beneficio);
+            double pérdida = transmisionesPorProducto.Values.SelectMany(x => x).Where(x => x.Beneficio < 0).Sum(x => x.Beneficio);
+            double beneficioTotal = transmisionesPorProducto.Values.SelectMany(x => x).Where(x => x.BeneficioTotal > 0).Sum(x => x.BeneficioTotal);
+            double pérdidaTotal = transmisionesPorProducto.Values.SelectMany(x => x).Where(x => x.BeneficioTotal < 0).Sum(x => x.BeneficioTotal);
+            double valorComisiones = transmisionesPorProducto.Values.SelectMany(x => x).Sum(x => x.ValorComisiones);
+
+
+            reporte.AppendLine(string.Format("Beneficio: {0}", beneficio));
+            reporte.AppendLine(string.Format("Beneficio total: {0}", beneficioTotal));
+            reporte.AppendLine(string.Format("Pérdida: {0}", pérdida));
+            reporte.AppendLine(string.Format("Pérdida total: {0}", pérdidaTotal));
+            reporte.AppendLine(string.Format("Valor comisiones: {0}", valorComisiones));
+            reporte.AppendLine(string.Format("Diferencia totales: {0}", beneficioTotal + pérdidaTotal));
+
+            return reporte.ToString();
         }
     }
 }
